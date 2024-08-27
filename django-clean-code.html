@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+    <title>Django Clean Code</title>
+
+    <link href="dist/reset.css" rel="stylesheet">
+    <link href="dist/reveal.css" rel="stylesheet">
+    <link href="dist/theme/black.css" rel="stylesheet">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link href="plugin/highlight/monokai.css" rel="stylesheet">
+
+    <style>
+        .reveal h1 {
+            text-transform: none;
+        }
+
+        .reveal h3 {
+            text-transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section><h1>Django Clean Code</h1></section>
+        <section data-visibility="hidden">
+            <h3>Outline</h3>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+        <section>
+            <section>
+                <h3>Fat Models, Thin Views</h3>
+                <p>Most of your business logic should reside in models, not views.</p>
+                <p>Views should primarily handle HTTP requests and responses, delegating logic to models, forms, or
+                    services.</p>
+            </section>
+        </section>
+        <section>
+            <h3>Signal</h3>
+            <p>Use Django signals for decoupling logic, like sending an email after a model is saved.</p>
+            <p>Avoid overusing signals, as they can make your codebase harder to trace.</p>
+        </section>
+        <section>
+            <h3>Keep Settings Manageable</h3>
+            <p>Use environment variables for sensitive data and environment-specific settings.</p>
+            <p>Split settings into multiple files (e.g., base.py, dev.py, prod.py) for different environments.</p>
+        </section>
+        <section>
+            <section>
+                <h3>Keep Serializers Simple</h3>
+                <p>Purpose: Serializers should focus on serializing and deserializing data with simple validation</p>
+                <p>Avoid Complex Logic: Any complex business logic should be moved to models, services, or custom
+                    methods.</p>
+            </section>
+            <section>
+                <p>You have an e-commerce application where users can place orders. When an order is placed, various checks are performed, such as checking if the user has enough balance, if the product is in stock, and calculating the total price with discounts. Instead of placing all this logic in the view, we'll delegate it to models and services.</p>
+            </section>
+            <section>
+                <h3>Bad Example: Complex Logic in the View</h3>
+                <pre><code># views.py
+from django.shortcuts import render, redirect
+from .models import Order, Product, User
+
+def place_order(request, product_id):
+    user = request.user
+    product = Product.objects.get(id=product_id)
+
+    # Complex business logic directly in the view
+    if user.balance >= product.price:
+        if product.stock > 0:
+            # Apply discount if the user is eligible
+            if user.is_eligible_for_discount:
+                total_price = product.price * 0.9  # 10% discount
+            else:
+                total_price = product.price
+
+            # Deduct stock and user balance
+            product.stock -= 1
+            user.balance -= total_price
+            product.save()
+            user.save()
+
+            # Create order
+            order = Order.objects.create(user=user, product=product, total_price=total_price)
+            return redirect('order_success', order_id=order.id)
+        else:
+            return render(request, 'error.html', {'message': 'Product out of stock'})
+    else:
+        return render(request, 'error.html', {'message': 'Insufficient balance'})</code></pre>
+            </section>
+            <section>
+                <h3>Good Example: Moving Complex Logic to Models and Services</h3>
+            </section>
+            <section>
+                <h3>Models: Delegate some of the logic to the Product and User models.</h3>
+                <pre><code># models.py
+from django.db import models
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField()
+
+    def is_in_stock(self):
+        return self.stock > 0
+
+    def reduce_stock(self, quantity=1):
+        if self.stock >= quantity:
+            self.stock -= quantity
+            self.save()
+            return True
+        return False
+
+
+class User(models.Model):
+    name = models.CharField(max_length=100)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
+    is_eligible_for_discount = models.BooleanField(default=False)
+
+    def can_afford(self, amount):
+        return self.balance >= amount
+
+    def apply_discount(self, amount):
+        return amount * 0.9 if self.is_eligible_for_discount else amount
+
+    def reduce_balance(self, amount):
+        if self.can_afford(amount):
+            self.balance -= amount
+            self.save()
+            return True
+        return False</code></pre>
+            </section>
+            <section>
+                <h3>2. Services: Create a service to handle the order placement logic.</h3>
+                <pre><code># services.py
+from .models import Order
+
+def place_order_service(user, product):
+    if not product.is_in_stock():
+        return False, "Product out of stock"
+
+    total_price = user.apply_discount(product.price)
+
+    if not user.reduce_balance(total_price):
+        return False, "Insufficient balance"
+
+    if not product.reduce_stock():
+        return False, "Failed to update stock"
+
+    order = Order.objects.create(user=user, product=product, total_price=total_price)
+    return True, order</code></pre>
+            </section>
+            <section>
+                <h3>3. View: Simplify the view by using the service.</h3>
+                <pre><code># views.py
+from django.shortcuts import render, redirect
+from .models import Product
+from .services import place_order_service
+
+def place_order(request, product_id):
+    product = Product.objects.get(id=product_id)
+    user = request.user
+
+    success, result = place_order_service(user, product)
+
+    if success:
+        return redirect('order_success', order_id=result.id)
+    else:
+        return render(request, 'error.html', {'message': result})</code></pre>
+            </section>
+            <section>
+                <h3>Explanation:</h3>
+                <ul>
+                    <li>Model Methods: Encapsulate logic related to a single model within that model. For instance, checking if a product is in stock and reducing stock are handled by the Product model, while user-related logic like checking balance and applying discounts are in the User model.</li>
+                    <li>Service Layer: The place_order_service function manages the overall order placement process, keeping the view simple and focused on handling the request/response cycle.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Explanation:(cont.)</h3>
+                <ul>
+                    <li>View: The view now simply coordinates between the request and the service, reducing its complexity and improving readability.</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <h3>Use ModelSerializer When Possible</h3>
+            <pre><code>class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'location', 'birth_date']</code></pre>
+        </section>
+        <section>
+            <h3>Leverage Serializer Methods for Custom Fields</h3>
+            <p>Purpose: Use SerializerMethodField or custom methods when you need to calculate or derive a field's
+                value.</p>
+            <p>Use Django signals for decoupling logic, like sending an email after a model is saved.
+                Avoid overusing signals, as they can make your codebase harder to trace.</p>
+            <pre><code data-line-numbers>class UserProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = ['user', 'bio', 'location', 'birth_date', 'full_name']
+
+    def get_full_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"</code></pre>
+        </section>
+        <section>
+            <h3>Validate Data with validate_&lt;field_name> Methods</h3>
+            <p>Use validate for general validation and validate_&lt;field_name> for specific fields.</p>
+            <pre><code>class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already in use.")
+        return value</code></pre>
+        </section>
+        <section>
+            <h3>Override create and update When Necessary</h3>
+            <p>Keep Logic Focused: If the logic becomes complex, consider moving it to the model or a service layer.</p>
+            <pre><code data-line-numbers>class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
+</code></pre>
+        </section>
+        <section>
+            <h3>Use Nested Serializers for Related Objects</h3>
+            <p>Avoid Deep Nesting: Be cautious with deeply nested serializers as they can become complex and difficult
+                to maintain.</p>
+            <pre><code>class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Profile
+        fields = ['user', 'bio', 'location', 'birth_date']</code></pre>
+        </section>
+        <section>
+            <h3>Leverage Serializer Meta Options</h3>
+            <p>fields, exclude, read_only_fields: Use these options to manage which fields are exposed and how they are
+                handled.</p>
+            <pre><code>class ArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'author', 'created_at']
+        read_only_fields = ['author', 'created_at']</code></pre>
+        </section>
+        <section>
+            <h3>Use Serializer Inheritance for Reusability</h3>
+            <pre><code>class BaseArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ['title', 'content']
+
+class ArticleDetailSerializer(BaseArticleSerializer):
+    author = UserSerializer()
+
+    class Meta(BaseArticleSerializer.Meta):
+        fields = BaseArticleSerializer.Meta.fields + ['author', 'created_at']</code></pre>
+        </section>
+        <section>
+            <h3>Use context for Additional Data</h3>
+            <p>Purpose: The context attribute can be used to pass additional data to the serializer.</p>
+            <p>Flexibility: It allows the serializer to adapt its behavior based on the context (e.g., request or
+                view).</p>
+            <pre><code data-line-numbers>class UserProfileSerializer(serializers.ModelSerializer):
+    is_current_user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Profile
+        fields = ['user', 'bio', 'location', 'birth_date', 'is_current_user']
+
+    def get_is_current_user(self, obj):
+        request = self.context.get('request')
+        return request.user == obj.user</code></pre>
+        </section>
+        <section>
+            <h3>Keep Serializers DRY</h3>
+            <p>Purpose: Avoid duplicating code across serializers.</p>
+            <p>Reusability: Use methods, serializer inheritance, or mixins to keep your code DRY (Don't Repeat
+                Yourself).</p>
+            <pre><code>class BaseUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+
+class DetailedUserSerializer(BaseUserSerializer):
+    class Meta(BaseUserSerializer.Meta):
+        fields = BaseUserSerializer.Meta.fields + ['email', 'first_name', 'last_name']</code></pre>
+        </section>
+        <section>
+            <h3>Model Serializer Meta Options</h3>
+            Summary of Common Meta Options:
+            model: Specifies the model associated with the serializer.
+            fields: List of fields to include in the serializer (or '__all__' to include all).
+            exclude: List of fields to exclude from the serializer.
+            read_only_fields: Fields that are read-only in the serializer.
+            extra_kwargs: Additional settings for individual fields.
+            depth: Controls the depth of serialization for related objects.
+            ordering: Specifies the order of fields (rarely used).
+            ref_name: Custom name for the serializer in schemas (useful for OpenAPI/Swagger).
+            abstract: Prevents the serializer from being instantiated or registered.
+        </section>
+        <section>
+            <h3>Model Serializer Meta Options</h3>
+            <pre><code>class Meta:
+    model = User
+    fields = ['id', 'username', 'email', 'password']
+    extra_kwargs = {
+        'password': {'write_only': True},
+        'email': {'required': True},
+    }</code></pre>
+        </section>
+        <section>
+            <section><p>Middleware should be used for cross-cutting concerns like authentication and logging, not for
+                business logic.</p></section>
+        </section>
+        <section>
+            <h3>Summary of Responsibilities:</h3>
+            <ul>
+                <li>Model: Defines the structure and basic behavior of the data. Should contain simple logic directly
+                    related to the data.
+                </li>
+                <li>Serializer: Transforms and validates data for APIs. Should focus on data transformation and delegate
+                    complex logic to services.
+                </li>
+                <li>Service: Encapsulates the core business logic of the application. Should handle all non-trivial
+                    operations and workflows.
+                </li>
+                <li>View: Manages HTTP requests and responses. Should delegate business logic to the service layer and
+                    focus on the flow of data.
+                </li>
+            </ul>
+        </section>
+        <section>
+            <pre><code>from .models import Post
+
+class PostService:
+
+    @staticmethod
+    def create_post(validated_data):
+        title = validated_data.get('title')
+        content = validated_data.get('content')
+        author = validated_data.get('author')
+
+        post = Post.objects.create(
+            title=title,
+            content=content,
+            author=author
+        )
+        return post
+
+    @staticmethod
+    def update_post(post, validated_data):
+        post.title = validated_data.get('title', post.title)
+        post.content = validated_data.get('content', post.content)
+        post.save()
+        return post
+
+    @staticmethod
+    def list_posts():
+        return Post.objects.all()
+
+    @staticmethod
+    def get_post_by_id(post_id):
+        try:
+            return Post.objects.get(id=post_id)
+        except Post.DoesNotExist:
+            return None
+</code></pre>
+        </section>
+        <section>
+            <pre><code>from rest_framework import generics
+from .models import Post
+from .serializers import PostSerializer
+from .services import PostService
+
+class PostListCreateView(generics.ListCreateAPIView):
+    queryset = PostService.list_posts()
+    serializer_class = PostSerializer
+
+class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer</code></pre>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+        slideNumber: 'c/t',
+    });
+</script>
+</body>
+</html>
