@@ -242,20 +242,24 @@ class OrderAggregate:
         fields = ['bio', 'location', 'birth_date']</code></pre>
         </section>
         <section>
-            <h3>Leverage Serializer Methods for Custom Fields</h3>
-            <p>Purpose: Use SerializerMethodField or custom methods when you need to calculate or derive a field's
-                value.</p>
-            <p>Use Django signals for decoupling logic, like sending an email after a model is saved.
-                Avoid overusing signals, as they can make your codebase harder to trace.</p>
-            <pre><code data-line-numbers>class UserProfileSerializer(serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField()
+            <section>
+                <h3>Leverage Serializer Methods for Custom Fields</h3>
+                <p>Purpose: Use SerializerMethodField or custom methods when you need to calculate or derive a field's
+                    value.</p>
+                <p>Use Django signals for decoupling logic, like sending an email after a model is saved.
+                    Avoid overusing signals, as they can make your codebase harder to trace.</p>
+            </section>
+            <section>
+                <pre><code data-line-numbers>class UserProfileSerializer(serializers.ModelSerializer):
+        full_name = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Profile
-        fields = ['user', 'bio', 'location', 'birth_date', 'full_name']
+        class Meta:
+            model = Profile
+            fields = ['user', 'bio', 'location', 'birth_date', 'full_name']
 
-    def get_full_name(self, obj):
-        return f"{obj.user.first_name} {obj.user.last_name}"</code></pre>
+        def get_full_name(self, obj):
+            return f"{obj.user.first_name} {obj.user.last_name}"</code></pre>
+            </section>
         </section>
         <section>
             <h3>Validate Data with validate_&lt;field_name> Methods</h3>
@@ -352,17 +356,23 @@ class DetailedUserSerializer(BaseUserSerializer):
         fields = BaseUserSerializer.Meta.fields + ['email', 'first_name', 'last_name']</code></pre>
         </section>
         <section>
-            <h3>Model Serializer Meta Options</h3>
-            Summary of Common Meta Options:
-            model: Specifies the model associated with the serializer.
-            fields: List of fields to include in the serializer (or '__all__' to include all).
-            exclude: List of fields to exclude from the serializer.
-            read_only_fields: Fields that are read-only in the serializer.
-            extra_kwargs: Additional settings for individual fields.
-            depth: Controls the depth of serialization for related objects.
-            ordering: Specifies the order of fields (rarely used).
-            ref_name: Custom name for the serializer in schemas (useful for OpenAPI/Swagger).
-            abstract: Prevents the serializer from being instantiated or registered.
+            <h3>Summary of Common Meta Options of Model:</h3>
+            <ul>
+                <li><u>model</u>: Specifies the model associated with the serializer.</li>
+                <li><u>fields</u>: List of fields to include in the serializer (or '__all__' to include all).</li>
+                <li><u>exclude</u>: List of fields to exclude from the serializer.</li>
+                <li><u>read_only_fields</u>: Fields that are read-only in the serializer.</li>
+            </ul>
+        </section>
+        <section>
+            <h3>Summary of Common Meta Options of Model:(cont.)</h3>
+            <ul>
+                <li><u>extra_kwargs</u>: Additional settings for individual fields.</li>
+                <li><u>depth</u>: Controls the depth of serialization for related objects.</li>
+                <li><u>ordering</u>: Specifies the order of fields (rarely used).</li>
+                <li><u>ref_name</u>: Custom name for the serializer in schemas (useful for OpenAPI/Swagger).</li>
+                <li><u>abstract</u>: Prevents the serializer from being instantiated or registered.</li>
+            </ul>
         </section>
         <section>
             <h3>Model Serializer Meta Options</h3>
@@ -387,6 +397,11 @@ class DetailedUserSerializer(BaseUserSerializer):
                 <li>Serializer: Transforms and validates data for APIs. Should focus on data transformation and delegate
                     complex logic to services.
                 </li>
+            </ul>
+        </section>
+        <section>
+            <h3>Summary of Responsibilities: (cont.)</h3>
+            <ul>
                 <li>Service: Encapsulates the core business logic of the application. Should handle all non-trivial
                     operations and workflows.
                 </li>
