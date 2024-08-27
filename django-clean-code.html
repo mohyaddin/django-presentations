@@ -190,6 +190,50 @@ def place_order(request, product_id):
                 </ul>
             </section>
         </section>
+
+
+        <!--region Description-->
+        <section>
+            <section>
+                <h3>Use Repository Pattern</h3>
+                <p>Repository Pattern: Encapsulate database access in a repository class. This helps in keeping database operations separate from business logic, improving testability and maintainability.</p>
+                <pre><code># repositories.py
+from .models import Product
+
+class ProductRepository:
+    @staticmethod
+    def get_product_by_id(product_id):
+        return Product.objects.get(id=product_id)
+
+    @staticmethod
+    def reduce_stock(product, quantity=1):
+        if product.stock >= quantity:
+            product.stock -= quantity
+            product.save()
+            return True
+        return False</code></pre>
+            </section>
+            <section>
+                <h3>Use Aggregates and Value Objects</h3>
+                <p>Aggregates: Group related models and business logic together into aggregates. This can be particularly useful when working with complex domain models.</p>
+                <pre><code># aggregates.py
+class OrderAggregate:
+    def __init__(self, user, product):
+        self.user = user
+        self.product = product
+
+    def place_order(self):
+        # Complex logic here
+        pass</code></pre>
+            </section>
+            <section>
+                <h3>External Libraries</h3>
+                <p>Third-Party Libraries: Consider using libraries like django-cleanup, django-lifecycle, or django-signals to handle common patterns and avoid bloating your models.</p>
+            </section>
+        </section>
+        <!--endregion-->
+
+
         <section>
             <h3>Use ModelSerializer When Possible</h3>
             <pre><code>class ProfileSerializer(serializers.ModelSerializer):
