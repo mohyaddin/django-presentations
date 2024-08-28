@@ -177,9 +177,196 @@ car = Car(engine)
 car.start()  # Output: Engine started</code></pre>
         </section>
         <section>
+            <h3>Class Variables</h3>
+            <p>Class variables are variables that are shared across all instances of a class. They are defined within the class but outside any instance methods. These variables are the same for every object of the class.</p>
+        </section>
+        <section>
+            <pre><code>class Employee:
+    company_name = "TechCorp"  # Class variable
+
+    def __init__(self, name):
+        self.name = name  # Instance variable
+
+emp1 = Employee("Alice")
+emp2 = Employee("Bob")
+print(emp1.company_name)  # Output: TechCorp
+print(emp2.company_name)  # Output: TechCorp
+
+Employee.company_name = "NewTechCorp"
+print(emp1.company_name)  # Output: NewTechCorp
+print(emp2.company_name)  # Output: NewTechCorp</code></pre>
+        </section>
+        <section>
+            <h3>Instance Variables</h3>
+            <p>Instance variables are attributes that are unique to each instance of a class. They are typically defined in the __init__ method and can differ between instances.</p>
+        </section>
+        <section>
+            <pre><code>class Employee:
+    def __init__(self, name, salary):
+        self.name = name  # Instance variable
+        self.salary = salary  # Instance variable
+
+emp1 = Employee("Alice", 50000)
+emp2 = Employee("Bob", 60000)
+print(emp1.name, emp1.salary)  # Output: Alice 50000
+print(emp2.name, emp2.salary)  # Output: Bob 60000</code></pre>
+        </section>
+        <section>
+            <h3>Static Methods</h3>
+            <p>Static methods belong to a class rather than any instance of the class. They do not modify object state or class state, and are defined using the @staticmethod decorator. They are often used for utility functions that make sense to belong to the class but don't need to access instance or class variables.</p>
+        </section>
+        <section>
+            <pre><code>class MathOperations:
+    @staticmethod
+    def add(x, y):
+        return x + y
+
+result = MathOperations.add(5, 10)
+print(result)  # Output: 15</code></pre>
+        </section>
+        <section>
+            <h3>Class Methods</h3>
+            <p>Class methods are methods that operate on the class itself rather than on instances of the class. They are defined using the @classmethod decorator and take cls as the first parameter, which refers to the class.</p>
+        </section>
+        <section>
+            <pre><code>class Employee:
+    num_employees = 0
+
+    def __init__(self, name):
+        self.name = name
+        Employee.num_employees += 1
+
+    @classmethod
+    def get_num_employees(cls):
+        return cls.num_employees
+
+emp1 = Employee("Alice")
+emp2 = Employee("Bob")
+print(Employee.get_num_employees())  # Output: 2</code></pre>
+        </section>
+        <section>
+            <h3>Properties (Getters and Setters)</h3>
+            <p>Properties allow for controlled access to instance variables by defining methods for getting and setting the value of a variable. The @property decorator is used to define a getter method, and @setter is used to define a setter method.
+            </p>
+        </section>
+        <section>
+            <pre><code>class Employee:
+    def __init__(self, name, salary):
+        self._name = name
+        self._salary = salary
+
+    @property
+    def salary(self):
+        return self._salary
+
+    @salary.setter
+    def salary(self, value):
+        if value < 0:
+            raise ValueError("Salary cannot be negative")
+        self._salary = value
+
+emp = Employee("Alice", 50000)
+print(emp.salary)  # Output: 50000
+emp.salary = 60000
+print(emp.salary)  # Output: 60000</code></pre>
+        </section>
+        <section>
+            <h3>Inheritance (Multiple Inheritance)</h3>
+            <p>In addition to single inheritance, Python supports multiple inheritance, where a class can inherit from more than one class. This allows a class to inherit methods and attributes from multiple classes.
+            </p>
+        </section>
+        <section>
+            <pre><code>class Animal:
+    def speak(self):
+        return "Some sound"
+
+class Flyable:
+    def fly(self):
+        return "Flying"
+
+class Bird(Animal, Flyable):
+    pass
+
+bird = Bird()
+print(bird.speak())  # Output: Some sound
+print(bird.fly())    # Output: Flying
+</code></pre>
+        </section>
+
+        <section>
             <p>These concepts are foundational to Object-Oriented Design and are used to create scalable, maintainable,
                 and flexible software systems. Each concept works together to enable developers to model real-world
                 scenarios effectively in their code.</p>
+        </section>
+        <section>
+            <h3>Method Overloading (Pythonic Approach)</h3>
+            <p>Python does not support traditional method overloading as in some other languages (e.g., Java). However, you can achieve similar functionality by using default arguments or variable-length arguments (*args and **kwargs).
+            </p>
+        </section>
+        <section>
+            <pre><code>class Calculator:
+    def add(self, a, b, c=0):
+        return a + b + c
+
+calc = Calculator()
+print(calc.add(2, 3))       # Output: 5
+print(calc.add(2, 3, 4))    # Output: 9
+</code></pre>
+        </section>
+        <section>
+            <h3>Method Overriding</h3>
+            <p>Method overriding occurs when a subclass provides a specific implementation of a method that is already defined in its superclass. The method in the subclass overrides the method in the superclass.</p>
+        </section>
+        <section>
+            <pre><code>class Animal:
+    def speak(self):
+        return "Some sound"
+
+class Dog(Animal):
+    def speak(self):
+        return "Bark"
+
+dog = Dog()
+print(dog.speak())  # Output: Bark</code></pre>
+        </section>
+        <section>
+            <h3>Abstract Classes and Methods</h3>
+            <p>Abstract classes are classes that cannot be instantiated and often contain one or more abstract methods. Abstract methods are methods declared in an abstract class that must be implemented by subclasses. This is enforced using the abc module.</p>
+        </section>
+        <section>
+            <pre><code>from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    @abstractmethod
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return "Bark"
+
+dog = Dog()
+print(dog.speak())  # Output: Bark</code></pre>
+        </section>
+        <section>
+            <h3>Operator Overloading</h3>
+            <p>Operator overloading allows you to define custom behavior for operators like +, -, *, etc., for your class objects by defining special methods such as __add__, __sub__, __mul__, etc.</p>
+        </section>
+        <section>
+            <pre><code>class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+v1 = Vector(2, 3)
+v2 = Vector(5, 7)
+print(v1 + v2)  # Output: Vector(7, 10)</code></pre>
         </section>
     </div>
 </div>
