@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+    <title>Object Oriented Concepts</title>
+
+    <link href="dist/reset.css" rel="stylesheet">
+    <link href="dist/reveal.css" rel="stylesheet">
+    <link href="dist/theme/black.css" rel="stylesheet">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link href="plugin/highlight/monokai.css" rel="stylesheet">
+
+    <style>
+        .reveal h1 {
+            text-transform: none;
+        }
+
+        .reveal h3 {
+            text-transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section><h1>Object Oriented Concepts</h1></section>
+        <section data-visibility="hidden">
+            <h3>Outline</h3>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+        <section>p
+            <p>Object-Oriented Design (OOD) is a methodology for designing a system by visualizing it as a group of
+                interacting objects. These objects represent real-world or conceptual entities, encapsulating both data
+                and behavior. Below are some core concepts in Object-Oriented Design:</p>
+        </section>
+        <sectio>
+            <h3>Classes and Objects</h3>
+            <ul>
+                <li>Class: A blueprint for creating objects (instances). It defines attributes (data) and methods
+                    (behavior).
+                </li>
+                <li>Object: An instance of a class. Objects are the fundamental building blocks of OOD.</li>
+            </ul>
+        </sectio>
+        <section>
+            <pre><code>class Car:
+    def __init__(self, make, model):
+        self.make = make
+        self.model = model
+
+    def start_engine(self):
+        print("Engine started")
+
+my_car = Car("Toyota", "Corolla")
+my_car.start_engine()</code></pre>
+        </section>
+        <section>
+            <h3>Encapsulation</h3>
+            <p>Encapsulation is the bundling of data and methods that operate on that data within one unit, typically a
+                class. It restricts direct access to some of the object's components, which is a means of preventing
+                accidental interference and misuse of the methods and data.</p>
+        </section>
+        <section>
+            <pre><code>class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance  # Private attribute
+
+    def deposit(self, amount):
+        self.__balance += amount
+
+    def get_balance(self):
+        return self.__balance
+
+account = BankAccount(1000)
+account.deposit(500)
+print(account.get_balance())  # Output: 1500</code></pre>
+        </section>
+        <section>
+            <h3>Inheritance</h3>
+            <p>Inheritance is a mechanism where a new class (subclass or derived class) inherits attributes and methods
+                from an existing class (superclass or base class). This promotes code reuse.</p>
+        </section>
+        <section>
+            <pre><code>class Animal:
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return "Bark"
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow"
+
+dog = Dog()
+cat = Cat()
+print(dog.speak())  # Output: Bark
+print(cat.speak())  # Output: Meow</code></pre>
+        </section>
+        <section>
+            <h3>Polymorphism</h3>
+            <p>Polymorphism allows objects of different classes to be treated as objects of a common superclass. It’s
+                often implemented using method overriding and interfaces, allowing for different behavior for the same
+                method.</p>
+        </section>
+        <section>
+            <pre><code>class Shape:
+    def area(self):
+        pass
+
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return 3.14 * (self.radius ** 2)
+
+shapes = [Rectangle(3, 4), Circle(5)]
+for shape in shapes:
+    print(shape.area())  # Outputs: 12 and 78.5</code></pre>
+        </section>
+        <section>
+            <h3>Abstraction</h3>
+            <p>Abstraction is the concept of hiding the complex implementation details and showing only the necessary
+                features of the object. It helps in reducing programming complexity and effort.</p>
+        </section>
+        <section>
+            <pre><code>from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    @abstractmethod
+    def start(self):
+        pass
+
+class Car(Vehicle):
+    def start(self):
+        print("Car started")
+
+car = Car()
+car.start()  # Output: Car started</code></pre>
+        </section>
+        <section>
+            <h3>Composition</h3>
+            <p>Composition is a design principle in which a class is composed of one or more objects of other classes in
+                order to achieve complex functionality. It represents a "has-a" relationship.</p>
+        </section>
+        <section>
+            <pre><code>class Engine:
+    def start(self):
+        print("Engine started")
+
+class Car:
+    def __init__(self, engine):
+        self.engine = engine
+
+    def start(self):
+        self.engine.start()
+
+engine = Engine()
+car = Car(engine)
+car.start()  # Output: Engine started</code></pre>
+        </section>
+        <section>
+            <p>These concepts are foundational to Object-Oriented Design and are used to create scalable, maintainable,
+                and flexible software systems. Each concept works together to enable developers to model real-world
+                scenarios effectively in their code.</p>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+        slideNumber: 'c/t',
+    });
+</script>
+</body>
+</html>
