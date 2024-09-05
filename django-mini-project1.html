@@ -36,8 +36,8 @@
             </ul>
         </section>
 
-        <section data-markdown="">
-          <textarea data-template>
+<section data-markdown="">
+  <textarea data-template>
 - pagination x
 ---
 ### Filter
@@ -60,18 +60,27 @@ py manage.py createsuperuser --username admin --email admin@yahoo.com --pass
 - add notes to admin model
 - add `__str__` to model
 ---
-- upload media
-- connect to mysql
-- have multiple env environment
-- write test
-- generate data with command
-- use github ci cd
-- writ docker
-- create env for each merge request
-- deploy to liara with sqlite database x
-- mssql database
-- change debug
-- use master code
+
+### Generate Data With Command
+- we have sth in Laravel like factory, seeder
+- in django use command with folder /app/management/commands/command_name.py
+- inherit from Command
+- run command with `python manage.py command_name`
+---
+### Deploy To Liara With Sqlite Database x
+- by default django uses sqlite
+- change database path in settings.py
+
+---
+### connect to mysql
+- change database part in settings.py
+- install package
+
+---
+### connect to MSSql
+- like MySql change `settings.py`
+- install package
+- learn some of differences of database
 
 ---
 ### timezone
@@ -100,8 +109,24 @@ liara deploy
 ---
 ### CORS
 - https://pypi.org/project/django-cors-headers/
-          </textarea>
-        </section>
+---
+### Dockerfile
+- write dockerfile Sample
+    - docker run ***
+- write docker-compose.yml Sample
+    - docker compose up
+
+---
+ToDo:
+- upload media
+- have multiple env environment
+- change debug
+- write test
+- use github ci cd
+- create env for each merge request
+- use master code
+  </textarea>
+</section>
     </div>
 </div>
 
