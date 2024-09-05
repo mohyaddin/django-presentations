@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+    <title>Django Mini Project 1</title>
+
+    <link href="dist/reset.css" rel="stylesheet">
+    <link href="dist/reveal.css" rel="stylesheet">
+    <link href="dist/theme/black.css" rel="stylesheet">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link href="plugin/highlight/monokai.css" rel="stylesheet">
+
+    <style>
+        .reveal h1 {
+            text-transform: none;
+        }
+
+        .reveal h3 {
+            text-transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section><h1>Django Mini Project 1</h1></section>
+        <section data-visibility="hidden">
+            <h3>Outline</h3>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+
+        <section data-markdown="">
+          <textarea data-template>
+- pagination x
+---
+### Filter
+- [django filter package](https://pypi.org/project/django-filter/)
+
+---
+### add swagger drf-spectacular x
+- install package
+- add to installed app
+- add routes
+---
+### create super user and admin page
+```shell
+py manage.py createsuperuser
+```
+or for prevent interactive:
+```shell
+py manage.py createsuperuser --username admin --email admin@yahoo.com --pass
+```
+- add notes to admin model
+- add `__str__` to model
+---
+- upload media
+- connect to mysql
+- have multiple env environment
+- write test
+- generate data with command
+- use github ci cd
+- writ docker
+- create env for each merge request
+- deploy to liara with sqlite database x
+- mssql database
+- timezone
+- log file
+- change debug
+- use master code
+---
+### soft delete
+---
+### user auth
+[user auth](https://www.django-rest-framework.org/api-guide/authentication/)
+- [advanced] oauth and openid connect SSO
+
+
+          </textarea>
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+             - easily deploy to liara
+              ```
+              liara deploy
+              ```
+              - project name: noteflow.liara.run
+              - liara config file
+          </textarea>
+        </section>
+
+        <section>
+            <h3>CORS</h3>
+            <a href="https://pypi.org/project/django-cors-headers/">cors package</a>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+        slideNumber: 'c/t',
+    });
+</script>
+</body>
+</html>
