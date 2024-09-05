@@ -37,107 +37,133 @@
         </section>
 
 <section data-markdown="">
-  <textarea data-template>
-### pagination x
----
-### Filter
-- [django filter package](https://pypi.org/project/django-filter/)
+<textarea data-template>
+    ### Create App
+    ```
+    python manage.py startapp
+    ```
+    ---
+    ### Create Model
+    - Note Model
+    - create migration with `python manage.py makemigrations`
+    - migrate with `python manage.py migrate`
+    - create sqlite by default
+    ---
+    ### Create url
+    - change `urls.py` in project
+    - change `urls.py` in app
+    ---
+    ### Create View
+    - in `views.py`
+    - create function based view or class based view (preferred) Sample
+    - use APIView Sample
+    - or use Mixin Sample
+    - or use generics Sample
+    - or use viewset Sample
+    ---
+    ### Pagination
+    ---
+    ### Filter
+    - [django filter package](https://pypi.org/project/django-filter/)
+    ---
+    ### add swagger drf-spectacular
+    - install package
+    - add to installed app
+    - add routes
+    ---
+    ### create super user and admin page
+    ```shell
+    py manage.py createsuperuser
+    ```
+    or for prevent interactive:
+    ```shell
+    py manage.py createsuperuser --username admin --email admin@yahoo.com --pass
+    ```
+    - add notes to admin model
+    - add `__str__` to model
+    ---
 
----
-### add swagger drf-spectacular x
-- install package
-- add to installed app
-- add routes
----
-### create super user and admin page
-```shell
-py manage.py createsuperuser
-```
-or for prevent interactive:
-```shell
-py manage.py createsuperuser --username admin --email admin@yahoo.com --pass
-```
-- add notes to admin model
-- add `__str__` to model
----
+    ### Generate Data With Command
+    - we have sth in Laravel like factory, seeder
+    - in django use command with folder /app/management/commands/command_name.py
+    - inherit from Command
+    - run command with `python manage.py command_name`
+    ---
+    ### Deploy To Liara With Sqlite Database
+    - by default django uses sqlite
+    - change database path in settings.py
 
-### Generate Data With Command
-- we have sth in Laravel like factory, seeder
-- in django use command with folder /app/management/commands/command_name.py
-- inherit from Command
-- run command with `python manage.py command_name`
----
-### Deploy To Liara With Sqlite Database x
-- by default django uses sqlite
-- change database path in settings.py
+    ---
+    ### connect to mysql
+    - change database part in settings.py
+    - install package
 
----
-### connect to mysql
-- change database part in settings.py
-- install package
+    ---
+    ### connect to MSSql
+    - like MySql change `settings.py`
+    - install package
+    - learn some of differences of database
 
----
-### connect to MSSql
-- like MySql change `settings.py`
-- install package
-- learn some of differences of database
+    ---
+    ### timezone
+    - change timezone in settings.py
+    - django is timezone free in database(link)
+    - liara has Tehran timezone by default
 
----
-### timezone
-- change timezone in settings.py
-- django is timezone free in database(link)
-- liara has Tehran timezone by default
+    ---
+    ### log file
+    - there is no log file in django!
 
----
-### log file
-- there is no log file in django!
+    ---
+    ### soft delete
+    ---
+    ### user auth
+    [user auth](https://www.django-rest-framework.org/api-guide/authentication/)
+    - [advanced] oauth and openid connect SSO
 
----
-### soft delete
----
-### user auth
-[user auth](https://www.django-rest-framework.org/api-guide/authentication/)
-- [advanced] oauth and openid connect SSO
+    ---
+    ### easily deploy to liara
+    ```
+    liara deploy
+    ```
+    - project name: noteflow.liara.run
+    - liara config file
+    ---
+    ### CORS
+    - https://pypi.org/project/django-cors-headers/
+    ---
+    ### Dockerfile
+    - write dockerfile Sample
+        - docker run ***
+    - write docker-compose.yml Sample
+        - docker compose up
 
----
-### easily deploy to liara
-```
-liara deploy
-```
-- project name: noteflow.liara.run
-- liara config file
----
-### CORS
-- https://pypi.org/project/django-cors-headers/
----
-### Dockerfile
-- write dockerfile Sample
-    - docker run ***
-- write docker-compose.yml Sample
-    - docker compose up
+    ---
+    ### Github CI CD
+    - use github CI CD file Sample
 
----
-### Github CI CD
-- use github CI CD file Sample
+    ---
+    ### Env File in Django
+    - change Debug in settings
+    ---
+    ### Master Code
+    - be careful for security
+    ---
+    ### Write Test For API
 
----
-### Env File in Django
-- change Debug in settings
----
-### Master Code
-- be careful for security
----
-### Write Test For API
-
----
-### upload Media
-- use media folder path in `settings.py`
-
----
-ToDo:
-- upload media
-- create env for each merge request
-  </textarea>
+    ---
+    ### Upload Media
+    - use media folder path in `settings.py`
+    - use FileField in Model
+    - use FileField in Serializer
+    - use validation
+        - size validation
+        - format validation
+        - authentication/authorization
+    ---
+    ToDo:
+    - create env for each merge request
+</textarea>
 </section>
     </div>
 </div>
