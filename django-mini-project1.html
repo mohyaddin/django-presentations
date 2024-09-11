@@ -189,11 +189,110 @@
     ToDo:
     - cache
     - websocket
+    - search in database
+    - search with elastic search
+    - use Model Manager
+    - seed database
+    - send email
+    - send sms
     - cronjob
     - celery
     - create env for each merge request
     - clean code
+    - security
+        - DDOS
+        - XSS
+        - Captcha
+        - Reverse Proxy Nginx
+        - rate limit
+    - load test
+    - write unit test and functional test (end to end test)
 </textarea>
+</section>
+<section>
+    <section><h3>Mixins View</h3></section>
+    <section>
+        <p style="direction: rtl; text-align: right; font-family: 'B Nazanin'; text-justify: inter-word;">
+            <span>۵ مدل Mixin وجود دارد</span>
+            <span>در Mixin فقط action method ها تعریف شده‌اند ولی توابع handler method مثل get و post تعریف نشده‌اند.</span>
+            <span>کارکرد آن این است که هر کدام یکی از رفتارهای CRUD را پیاده‌سازی کرده است.</span>
+            <a href="https://www.django-rest-framework.org/api-guide/generic-views/#mixins">doc</a>
+        </p>
+    </section>
+    <section>
+        <table>
+            <tr>
+                <td>ListModelMixin</td>
+                <td>.list</td>
+                <td>200 OK(*)</td>
+            </tr>
+            <tr>
+                <td>CreateModelMixin</td>
+                <td>.create</td>
+                <td>201 Created(*)  or 400 Bad Request(*)</td>
+            </tr>
+            <tr>
+                <td>RetrieveModelMixin</td>
+                <td>.retrieve</td>
+                <td>200 OK(*) or 404 Not Found</td>
+            </tr>
+            <tr>
+                <td>UpdateModelMixin</td>
+                <td>.partial_update</td>
+                <td>200 OK(*) or 400 Bad Request</td>
+            </tr>
+            <tr>
+                <td>DestroyModelMixin</td>
+                <td>.destroy</td>
+                <td>204 No Content or 404 Not Found</td>
+            </tr>
+        </table>
+    </section>
+    <section>
+        <p>all with parameters of (request, *args, **kwargs)</p>
+    </section>
+</section>
+<section>
+    <section>
+        <h3>Generics View</h3>
+        <p>or Concrete View Classes</p>
+    </section>
+    <section>
+        <p style="direction: rtl; text-align: right; font-family: 'B Nazanin'; text-justify: inter-word;">
+            <span>این جا کلاس‌ها به صورت concrete هستند و در صورتی که نیاز نباشد که customize انجام دهیم معمولاً نیاز ما را برطرف می‌کند و کد کوتاه و تمیزی به ما تحویل می‌دهد.</span>
+            <span>این‌ها از همان توابع Mixin استفاده می‌کنند و علاوه بر آن‌ها توابع get و post و غیره را هم پیاده‌سازی کرده‌اند. </span>
+            <a href="https://www.django-rest-framework.org/api-guide/generic-views/#concrete-view-classes">doc</a>
+        </p>
+    </section>
+    <section>
+        <table>
+            <tr>
+                <td>CreateAPIView</td>
+                <td>post</td>
+                <td>GenericAPIView, CreateModelMixin</td>
+            </tr>
+            <tr>
+                <td>ListAPIView</td>
+                <td>get</td>
+                <td>GenericAPIView, ListModelMixin</td>
+            </tr>
+            <tr>
+                <td>RetrieveAPIView</td>
+                <td>get</td>
+                <td>GenericAPIView, RetrieveModelMixin</td>
+            </tr>
+            <tr>
+                <td>DestroyAPIView</td>
+                <td>delete</td>
+                <td>GenericAPIView, DestroyModelMixin</td>
+            </tr>
+            <tr>
+                <td>UpdateAPIView</td>
+                <td>put and patch</td>
+                <td>GenericAPIView, UpdateModelMixin</td>
+            </tr>
+        </table>
+    </section>
 </section>
     </div>
 </div>
