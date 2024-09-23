@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+    <title>Django Mini Project 1 Front</title>
+
+    <link href="dist/reset.css" rel="stylesheet">
+    <link href="dist/reveal.css" rel="stylesheet">
+    <link href="dist/theme/black.css" rel="stylesheet">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link href="plugin/highlight/monokai.css" rel="stylesheet">
+
+    <style>
+        .reveal h1 {
+            text-transform: none;
+        }
+
+        .reveal h3 {
+            text-transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section><h1>Django Mini Project 1 Front</h1></section>
+        <section data-visibility="hidden">
+            <h3>Outline</h3>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+
+<section data-markdown="">
+<textarea data-template>
+    ### Project Description
+    - Create Note App
+    - User can authenticate
+    - Can create public and private note
+    - Write Dockerfile
+    ---
+    ### Create Nextjs Project
+    - better to use typescript
+    - with phpstorm ide
+    - or with command `npx create-next-app`
+    - use css framework
+    ---
+    ### First Page: Create Note Form
+    - use Form in Nextjs
+    ---
+    ### 2nd Page: List Notes
+    - call List Notes API
+    - show list of notes
+    ---
+    ### 3rd Page: Note Detail
+    - click in each note
+    - show note detail
+    ---
+    ### 4th Page: Edit Note
+    - edit note page
+    ---
+    ### login in nextjs
+    -
+    ---
+    ToDo:
+    - add Dockerfile and docker-compose
+    - add liara deploy
+    - write test
+</textarea>
+</section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+        slideNumber: 'c/t',
+    });
+</script>
+</body>
+</html>
