@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+
+    <title>Laravel Inertia</title>
+
+    <link href="dist/reset.css" rel="stylesheet">
+    <link href="dist/reveal.css" rel="stylesheet">
+    <link href="dist/theme/black.css" rel="stylesheet">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link href="plugin/highlight/monokai.css" rel="stylesheet">
+
+    <style>
+        .reveal h1 {
+            text-transform: none;
+        }
+
+        .reveal h3 {
+            text-transform: none;
+        }
+    </style>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section><h1>Laravel Inertia</h1><span>with  laravel  breeze starter kit</span></section>
+        <section data-visibility="hidden">
+            <h3>Outline</h3>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+        <section>
+            <h1>Create Laravel  Project</h1>
+            <pre><code>composer create-project  laravel/laravel laravel11-react-inertia</code></pre>
+        </section>
+        <section>
+            <h1>Cd in Directory</h1>
+            <pre><code>cd laravel11-react-inertia</code></pre>
+        </section>
+        <section>
+            <h1>Install Laravel Breeze Package</h1>
+            <pre><code>composer require laravel/breeze --dev</code></pre>
+        </section>
+        <section>
+            <h1>Run breeze:install Command</h1>
+            <pre><code>php artisan  breeze:install</code></pre>
+        </section>
+        <section>
+            <h1>Change env file db access</h1>
+        </section>
+        <section>
+            <h1>Migrate DB</h1>
+            <pre><code>php artisan migrate</code></pre>
+        </section>
+        <section>
+            <h1>Serve</h1>
+            <pre><code>php artisan serve</code></pre>
+        </section>
+        <section>
+            <h1>NPM RUN DEV</h1>
+            <pre><code>npm run dev</code></pre>
+        </section>
+        <section>
+            <h1>Done!</h1>
+            <p>see http://localhost:8000</p>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+        slideNumber: 'c/t',
+    });
+</script>
+</body>
+</html>
